@@ -44,7 +44,6 @@ def main():
     if(formatPL(tr_num)):
         url = "https://sendparcel.poslaju.com.my/open/trace"
         payload = {"tno":tr_num}
-        res = requests.session()
         header = {
             'Connection':'keep-alive',
             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36'
