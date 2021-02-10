@@ -14,8 +14,11 @@ def formatPL(tr):
     for i in range(0, len(tr), length):
         los.append(tr[i:length+i])
     
-    if los[0] == 'PL' and len(tr) == 14:
-        status = True
+    if len(tr) == 14:
+        if los[0] in ['EE','EH','EP','ER','EN','EM','PL']:
+            status = True
+        else:
+            status = False
     else:
         status = False
 
