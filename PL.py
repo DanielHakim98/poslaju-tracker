@@ -59,7 +59,7 @@ def main():
             for row in BeautifulSoup(html_data, features="lxml")("tr")]
 
         if len(table_data) > 0:
-            table_data.pop(0)   # Pop First Item - Contain Nothing
+            del table_data[0] # Remove First Item - Contain Nothing
 
             for date,status,place in table_data:
                 print("\nStatus: ", status)
