@@ -12,13 +12,10 @@ def formatPL(tr):
     status = False
     los = []
     for i in range(0, len(tr), length):
-        los.append(tr[i:length+i])
+        los.append(tr[i:length])
     
-    if len(tr) == 14:
-        if los[0] in ['EE','EH','EP','ER','EN','EM','PL']:
-            status = True
-        else:
-            status = False
+    if len(tr) == 14 and los[0] in ['EE','EH','EP','ER','EN','EM','PL']:
+        status = True
     else:
         status = False
 
@@ -51,7 +48,7 @@ def main():
             'Connection':'keep-alive',
             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36'
         }
-        res = requests.get(url,payload, headers = header, timeout=5)
+        res = requests.get(url,payload, headers = header)
         html_data = res.content
 
         # Get Table Row and Columns
