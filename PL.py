@@ -1,36 +1,35 @@
 import requests
 import os
-from bs4 import BeautifulSoup
+
 
 # Clear Console On Windows/Linux
 def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
+
 
 # Format PosLaju Tracking Number To Be Accurate
-def formatPL(tr):
-    length = 2
-    status = False
-    los = []
-    for i in range(0, len(tr), length):
-        los.append(tr[i:length])
-    
-    if len(tr) == 14 and los[0] in ['EE','EH','EP','ER','EN','EM','PL']:
-        status = True
-    else:
-        status = False
+formatPL = lambda tr: len(tr) == 13 and tr[0:2] in [
+    "EE",
+    "EH",
+    "EP",
+    "ER",
+    "EN",
+    "EM",
+    "PL",
+]
 
-    return status
 
 def exit():
-    ex = str(input("\nDo You Want To Continue? (Y/N):"))
-    ex = ex.upper()
+    exiting = str(input("\nDo You Want To Continue? (Y/N):"))
+    exiting = exiting.upper()
 
     print("\n")
-    if ex == 'Y':
+    if exiting == "Y":
         cls()
         main()
     else:
         return
+
 
 def main():
     print("#########################")
@@ -41,35 +40,43 @@ def main():
     tr_num = str(input("Tracking Number: "))
     tr_num = tr_num.upper()
 
-    if(formatPL(tr_num)):
-        url = "https://sendparcel.poslaju.com.my/open/trace"
-        payload = {"tno":tr_num}
-        header = {
-            'Connection':'keep-alive',
-            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36'
+    if formatPL(tr_num):
+        url = "https://ttu-svc.pos.com.my/api/trackandtrace/v1/request"
+        headers = {
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
         }
-        res = requests.get(url,payload, headers = header)
-        html_data = res.content
+        body = {"connote_ids": [tr_num], "culture": "en"}
 
-        # Get Table Row and Columns
-        table_data = [[cell.text for cell in row("td")]
-            for row in BeautifulSoup(html_data, features="lxml")("tr")]
+        try:
+            response = requests.post(url, headers=headers, json=body)
+            response_body = response.json()
+        except requests.RequestException as error_request:
+            print(
+                "There is an error while sending th request.\n Eror details: ",
+                error_request,
+            )
 
-        if len(table_data) > 0:
-            del table_data[0] # Remove First Item - Contain Nothing
-
-            for date,status,place in table_data:
-                print("\nStatus: ", status)
-                print("Place: ", place)
-                print("Date: ", date)
-
-        else:
-            print("\nStatus: Tracking Not Found")
-
+        # Destructure response body (in json format) and only extract relevant information to users
+        data = response_body["data"][0]
+        print("\n======================================")
+        print("Your tracking number: ", data["connote_id"])
+        print("Process status: ", data["process_status"])
+        print("======================================")
+        is_available = lambda d, k: d.get(k, "N/A")
+        for idx, ele in enumerate(data["tracking_data"]):
+            print(f"\nTracking #{len(data['tracking_data']) -idx }")
+            print("--------------------------------")
+            print("date: ", is_available(ele, "date"))
+            print("process: ", is_available(ele, "process"))
+            print("process_summary: ", is_available(ele, "process_summary"))
+            print("office:", is_available(ele, "office"))
     else:
-        print("Wrong Format!")
-    
+        print(
+            "Wrong Tracking Number format. Please ensure the tracking number is correct."
+        )
     exit()
 
 
-main()
+if __name__ == "__main__":
+    main()
