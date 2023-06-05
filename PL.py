@@ -8,7 +8,7 @@ def cls():
 
 
 # Format PosLaju Tracking Number To Be Accurate
-formatPL = lambda tr: len(tr) == 13 and tr[0:2] in [
+formatPL = lambda tr: len(tr) >= 13 and tr[0:2] in [
     "EE",
     "EH",
     "EP",

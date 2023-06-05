@@ -8,12 +8,12 @@ class TestPL(unittest.TestCase):
         self.assertEqual(poslaju.formatPL(valid_tn), True, "Invalid tracking number")
 
     def test_tn_not_13(self):
-        """Should be be exactly 13 characters long"""
+        """Should be be more or equal 13 characters long"""
         not_13_char = "PL7718832123"
         self.assertEqual(
             poslaju.formatPL(not_13_char),
             False,
-            "Should be be exactly 13 characters long",
+            "Should be be more or equal 13 characters long",
         )
 
     def test_startwith_invalid_char(self):
