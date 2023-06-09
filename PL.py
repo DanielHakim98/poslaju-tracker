@@ -3,18 +3,21 @@ import os
 
 
 def main():
-    display_main_menu()
-    tr_num = generate_prompt("Tracking Number: ")
-    if is_tracking_number_valid(tr_num):
-        url = "https://ttu-svc.pos.com.my/api/trackandtrace/v1/request"
-        response_body = send_post_request(url, tr_num)
-        data = extract_data_value(response_body)
-        display_tracker_result(data)
-    else:
-        print(
-            "Wrong Tracking Number format. Please ensure the tracking number is correct."
-        )
-    is_exiting()
+    condition = True
+    while condition:
+        clear_console()
+        display_main_menu()
+        tr_num = generate_prompt("Tracking Number: ")
+        if is_tracking_number_valid(tr_num):
+            url = "https://ttu-svc.pos.com.my/api/trackandtrace/v1/request"
+            response_body = send_post_request(url, tr_num)
+            data = extract_data_value(response_body)
+            display_tracker_result(data)
+        else:
+            print(
+                "Wrong Tracking Number format. Please ensure the tracking number is correct."
+            )
+        condition = is_continuing()
 
 
 def display_main_menu():
@@ -65,11 +68,11 @@ def get_http_payload(tracking_number: str) -> dict:
     return {"connote_ids": [tracking_number], "culture": "en"}
 
 
-def extract_data_value(response_body):
+def extract_data_value(response_body: dict) -> dict:
     return response_body["data"][0]
 
 
-def display_tracker_result(data):
+def display_tracker_result(data) -> None:
     print("\n======================================")
     print("Your tracking number: ", data["connote_id"])
     print("Process status: ", data["process_status"])
@@ -84,14 +87,12 @@ def display_tracker_result(data):
         print("office:", is_available(ele, "office"))
 
 
-def is_exiting():
+def is_continuing() -> bool:
     exit_answer = generate_prompt("\nDo You Want To Continue? (Y/N):")
-    if exit_answer == "Y":
-        clear_console()
-        main()
+    return exit_answer == "Y"
 
 
-def clear_console():
+def clear_console() -> None:
     os.system("cls" if os.name == "nt" else "clear")
 
 
