@@ -6,14 +6,16 @@ class TestPL(unittest.TestCase):
     def test_valid_format(self):
         valid_tn = "PL77188321238"
         self.assertEqual(
-            poslaju.is_tracking_number_valid(valid_tn), True, "Invalid tracking number"
+            poslaju.is_valid_tracking_number_format(valid_tn),
+            True,
+            "Invalid tracking number",
         )
 
     def test_tn_not_13(self):
         """Should be be more or equal 13 characters long"""
         not_13_char = "PL7718832123"
         self.assertEqual(
-            poslaju.is_tracking_number_valid(not_13_char),
+            poslaju.is_valid_tracking_number_format(not_13_char),
             False,
             "Should be be more or equal 13 characters long",
         )
@@ -25,7 +27,7 @@ class TestPL(unittest.TestCase):
         """
         invalid_startwith = "FF77188321238"
         self.assertEqual(
-            poslaju.is_tracking_number_valid(invalid_startwith),
+            poslaju.is_valid_tracking_number_format(invalid_startwith),
             False,
             """Should start with these code: ["EE", "EH", "EP", "ER", "EN", "EM", "PL"]""",
         )
