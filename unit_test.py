@@ -1,4 +1,9 @@
-from poslaju_tracker import is_still_running_program, return_value
+from poslaju_tracker import (
+    is_still_running_program,
+    return_value,
+    extract_data_from_response,
+    is_valid_tracking_number_format,
+)
 from _pytest.monkeypatch import MonkeyPatch
 
 
@@ -31,3 +36,20 @@ class TestReturnValue:
         test_input_data = {"tracking_data": ""}
         real_return_value = return_value(test_input_data, "tracking_data")
         assert real_return_value == "N/A"
+
+
+class TestExtractDataFromResponse:
+    def test_when_data_is_null(self):
+        test_input_data = {"data": None}
+        returned_data = extract_data_from_response(test_input_data)
+        assert returned_data == {}
+
+
+class TestValidateTrackingNumberFormat:
+    def test_tracking_number_less_than_13(self):
+        returned_data = is_valid_tracking_number_format("PL123456789")
+        assert returned_data is False
+
+    def test_invalid_initial_tracking_number(self):
+        returned_data = is_valid_tracking_number_format("LP1234567890M")
+        assert returned_data is False
