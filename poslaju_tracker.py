@@ -56,7 +56,12 @@ def start_tracking(tr_num: str) -> None:
 def send_post_request(url: str, tracking_number: str) -> dict:
     try:
         response = requests.post(
-            url, headers=get_http_headers(), json=get_http_payload(tracking_number)
+            url,
+            headers={
+                "Accept": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
+            },
+            json={"connote_ids": [tracking_number], "culture": "en"},
         )
         return response.json()
     except requests.RequestException as error_request:
@@ -64,17 +69,6 @@ def send_post_request(url: str, tracking_number: str) -> dict:
             "There is an error while sending th request.\n Eror details: ",
             error_request,
         )
-
-
-def get_http_headers() -> dict:
-    return {
-        "Accept": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
-    }
-
-
-def get_http_payload(tracking_number: str) -> dict:
-    return {"connote_ids": [tracking_number], "culture": "en"}
 
 
 def extract_data_from_response(response_body: dict) -> dict:
