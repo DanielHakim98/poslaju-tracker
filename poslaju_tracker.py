@@ -90,7 +90,7 @@ def generate_tracker_result_header(data: dict) -> str:
     return header
 
 
-def display_tracker_result_header(data: dict):
+def display_tracker_result_header(data: dict) -> None:
     header = generate_tracker_result_header(data)
     print(header)
 
@@ -110,7 +110,7 @@ def generate_tracker_result_children(count: int, dict_data: dict) -> str:
     return result
 
 
-def display_tracker_result_children(count: int, dict_data: dict) -> str:
+def display_tracker_result_children(count: int, dict_data: dict) -> None:
     output = generate_tracker_result_children(count, dict_data)
     print(output)
 
