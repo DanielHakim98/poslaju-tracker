@@ -1,36 +1,16 @@
-import PL as poslaju
-import unittest
+from poslaju_tracker import is_still_running_program
+from _pytest.monkeypatch import MonkeyPatch
 
 
-class TestPL(unittest.TestCase):
-    def test_valid_format(self):
-        valid_tn = "PL77188321238"
-        self.assertEqual(
-            poslaju.is_valid_tracking_number_format(valid_tn),
-            True,
-            "Invalid tracking number",
-        )
+class TestIsStillRunningProgram:
+    def test_returns_true_when_user_input_is_y(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr("builtins.input", lambda _: "Y")
+        assert is_still_running_program() is True
 
-    def test_tn_not_13(self):
-        """Should be be more or equal 13 characters long"""
-        not_13_char = "PL7718832123"
-        self.assertEqual(
-            poslaju.is_valid_tracking_number_format(not_13_char),
-            False,
-            "Should be be more or equal 13 characters long",
-        )
+    def test_returns_false_when_user_input_is_n(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr("builtins.input", lambda _: "N")
+        assert is_still_running_program() is False
 
-    def test_startwith_invalid_char(self):
-        """
-        Should start with these code:
-        ["EE", "EH", "EP", "ER", "EN", "EM", "PL"]
-        """
-        invalid_startwith = "FF77188321238"
-        self.assertEqual(
-            poslaju.is_valid_tracking_number_format(invalid_startwith),
-            False,
-            """Should start with these code: ["EE", "EH", "EP", "ER", "EN", "EM", "PL"]""",
-        )
-
-
-unittest.main()
+    def test_returns_false_when_user_input_is_invalid(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr("builtins.input", lambda _: "Invalid")
+        assert is_still_running_program() is False
