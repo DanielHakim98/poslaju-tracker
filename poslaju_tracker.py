@@ -38,6 +38,7 @@ def start_user_interaction(tr_num) -> None:
         print("Invalid Tracking Number Format.")
 
 
+# Tested
 def is_valid_tracking_number_format(tr: str) -> bool:
     return len(tr) >= 13 and tr[0:2] in [
         "EE",
@@ -75,6 +76,7 @@ def send_post_request(tracking_number: str) -> dict:
         )
 
 
+# Tested
 def extract_data_from_response(response_body: dict) -> dict:
     data_from_body = response_body.get("data", [{}])
     return data_from_body[0] if data_from_body is not None else {}
@@ -99,6 +101,7 @@ def display_tracker_result_header(data: dict) -> None:
     print(header)
 
 
+# Tested
 def return_value(dict_data: dict, key: str) -> str:
     value = dict_data.get(key, "N/A")
     return value if len(value) > 0 else "N/A"
@@ -119,6 +122,7 @@ def display_tracker_result_children(count: int, dict_data: dict) -> None:
     print(output)
 
 
+# Tested
 def is_still_running_program() -> bool:
     exit_answer = generate_user_prompt("\nDo You Want To Continue? (Y/N):")
     return exit_answer == "Y"
