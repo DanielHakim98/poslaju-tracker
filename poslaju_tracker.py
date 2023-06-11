@@ -15,11 +15,16 @@ def clear_console() -> None:
     os.system("cls" if os.name == "nt" else "clear")
 
 
+def generate_display_main_menu() -> str:
+    main_menu = "\n#########################\n"
+    main_menu += "# PosLaju Tracker v0.1 #\n"
+    main_menu += "# Coded By Noor Aiman  #\n"
+    main_menu += "########################\n"
+    return main_menu
+
+
 def display_main_menu() -> None:
-    print("#########################")
-    print("# PosLaju Tracker v0.1 #")
-    print("# Coded By Noor Aiman  #")
-    print("########################\n")
+    print(generate_display_main_menu())
 
 
 def generate_user_prompt(message: str) -> str:
