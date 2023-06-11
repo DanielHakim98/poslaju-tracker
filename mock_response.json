@@ -1,0 +1,30 @@
+{
+  "code": "S0000",
+  "message": "Success",
+  "data": [
+    {
+      "connote_id": "PL1234567890MY",
+      "sender_data": {},
+      "recipient_data": {},
+      "process_status": "",
+      "eta_data": {
+        "summary": "",
+        "day": "",
+        "date": "",
+        "upper_eta": "",
+        "lower_eta": ""
+      },
+      "tracking_data": [
+        {
+          "type": "Error",
+          "date": "",
+          "process": "No record found",
+          "process_summary": "",
+          "office": "",
+          "error_details": null,
+          "event_type": ""
+        }
+      ]
+    }
+  ]
+}

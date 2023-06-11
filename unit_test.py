@@ -1,10 +1,14 @@
+import json
+import requests
+from _pytest.monkeypatch import MonkeyPatch
+
 from poslaju_tracker import (
     is_still_running_program,
     return_value,
     extract_data_from_response,
     is_valid_tracking_number_format,
+    send_post_request,
 )
-from _pytest.monkeypatch import MonkeyPatch
 
 
 class TestIsStillRunningProgram:
@@ -53,3 +57,27 @@ class TestValidateTrackingNumberFormat:
     def test_invalid_initial_tracking_number(self):
         returned_data = is_valid_tracking_number_format("LP1234567890M")
         assert returned_data is False
+
+
+# This mock HTTP Response is used by TestSendPostRequest class
+class MockResponse:
+    @staticmethod
+    def json() -> dict:
+        with open("mock_response.json") as json_file:
+            return json.load(json_file)
+
+
+class TestSendPostRequest:
+    @staticmethod
+    def mock_post(*args, **kwargs):
+        return MockResponse()
+
+    def test_send_post_request_ok(self, monkeypatch: MonkeyPatch):
+        monkeypatch.setattr(requests, "post", TestSendPostRequest.mock_post)
+        test_input_tracking_number = "PL1234567890MY"
+
+        test_returned_value = send_post_request(test_input_tracking_number)
+
+        assert (
+            set(["code", "message", "data"]).issubset(set(test_returned_value)) is True
+        )
