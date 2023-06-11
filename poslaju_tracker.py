@@ -78,7 +78,8 @@ def get_http_payload(tracking_number: str) -> dict:
 
 
 def extract_data_from_response(response_body: dict) -> dict:
-    return response_body["data"][0]
+    data_from_body = response_body.get("data", [{}])
+    return data_from_body[0] if data_from_body is not None else {}
 
 
 def display_tracker_result(data: dict) -> None:
@@ -87,11 +88,17 @@ def display_tracker_result(data: dict) -> None:
         display_tracker_result_children(len(data["tracking_data"]) - idx, ele)
 
 
-def display_tracker_result_header(data: dict) -> None:
-    print("\n======================================")
-    print("Your tracking number: ", data["connote_id"])
-    print("Process status: ", return_value(data, "process_status"))
-    print("======================================")
+def generate_tracker_result_header(data: dict) -> str:
+    header = "\n======================================\n"
+    header += f"Your tracking number: {data['connote_id']}\n"
+    header += f"Process status: {return_value(data, 'process_status')}\n"
+    header += "======================================\n"
+    return header
+
+
+def display_tracker_result_header(data: dict):
+    header = generate_tracker_result_header(data)
+    print(header)
 
 
 def return_value(dict_data: dict, key: str) -> str:
@@ -99,13 +106,19 @@ def return_value(dict_data: dict, key: str) -> str:
     return value if len(value) > 0 else "N/A"
 
 
-def display_tracker_result_children(count: int, dict_data: dict) -> None:
-    print(f"\nTracking #{count}")
-    print("--------------------------------")
-    print("date: ", return_value(dict_data, "date"))
-    print("process: ", return_value(dict_data, "process"))
-    print("process_summary: ", return_value(dict_data, "process_summary"))
-    print("office:", return_value(dict_data, "office"))
+def generate_tracker_result_children(count: int, dict_data: dict) -> str:
+    result = f"\nTracking #{count}\n"
+    result += "--------------------------------\n"
+    result += f"date: {return_value(dict_data, 'date')}\n"
+    result += f"process: {return_value(dict_data, 'process')}\n"
+    result += f"process_summary: {return_value(dict_data, 'process_summary')}\n"
+    result += f"office: {return_value(dict_data, 'office')}\n"
+    return result
+
+
+def display_tracker_result_children(count: int, dict_data: dict) -> str:
+    output = generate_tracker_result_children(count, dict_data)
+    print(output)
 
 
 def is_still_running_program() -> bool:
