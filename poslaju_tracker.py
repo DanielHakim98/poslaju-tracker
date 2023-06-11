@@ -52,16 +52,15 @@ def is_valid_tracking_number_format(tr: str) -> bool:
 
 
 def start_tracking(tr_num: str) -> None:
-    url = "https://ttu-svc.pos.com.my/api/trackandtrace/v1/request"
-    response_body = send_post_request(url, tr_num)
+    response_body = send_post_request(tr_num)
     extracted_data = extract_data_from_response(response_body)
     display_tracker_result(extracted_data)
 
 
-def send_post_request(url: str, tracking_number: str) -> dict:
+def send_post_request(tracking_number: str) -> dict:
     try:
         response = requests.post(
-            url,
+            url="https://ttu-svc.pos.com.my/api/trackandtrace/v1/request",
             headers={
                 "Accept": "application/json",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0",
